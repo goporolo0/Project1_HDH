@@ -28,8 +28,13 @@
 					// See definitions listed under #else
 class OpenFile {
   public:
-    OpenFile(int f) { file = f; currentOffset = 0; }	// open the file
-    ~OpenFile() { Close(file); }			// close the file
+  	//Khai bao bien type
+  	int type;
+  	
+	//Ham dung cua class OpenFile
+	OpenFile(int f) { file = f; currentOffset = 0; type = 0; }	// mo file mac dinh
+	OpenFile(int f, int t) { file = f; currentOffset = 0; type = t; }	// mo file voi tham so type
+    	~OpenFile() { Close(file); }
 
     int ReadAt(char *into, int numBytes, int position) { 
     		Lseek(file, position, 0); 
@@ -63,8 +68,13 @@ class FileHeader;
 
 class OpenFile {
   public:
+//khai bao
+int type;
     OpenFile(int sector);		// Open a file whose header is located
 					// at "sector" on the disk
+//khai bao
+    OpenFile(int sector, int type);
+
     ~OpenFile();			// Close the file
 
     void Seek(int position); 		// Set the position from which to 

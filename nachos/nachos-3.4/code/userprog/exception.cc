@@ -171,6 +171,20 @@ void ExceptionHandler(ExceptionType which)
             interrupt->Halt();
             return;
 
+	case SC_ReadString:
+		{
+
+			int virtAddr, length;
+			char *buffer;
+			virtAddr = machine->ReadRegister(4);	
+			length = machine->ReadRegister(5);		
+			buffer = User2System(virtAddr, length); 
+			gSynchConsole->Read(buffer, length);	
+			System2User(virtAddr, length, buffer);	
+			delete buffer;
+			break;
+		}
+
         case SC_PrintString:
         {
             int virtAddr;

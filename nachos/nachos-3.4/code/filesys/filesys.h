@@ -38,13 +38,42 @@
 #include "copyright.h"
 #include "openfile.h"
 
+//khai bao 
+typedef int OpenFileID;
 #ifdef FILESYS_STUB 		// Temporarily implement file system calls as 
 				// calls to UNIX, until the real file system
 				// implementation is available
 class FileSystem {
   public:
-    FileSystem(bool format) {}
+//khai bao 2 bien
+    OpenFile** openf;
+    int index;
 
+//khai bao them filesystem
+    FileSystem(bool format) {
+openf = new OpenFile*[15];
+index = 0;
+for(int i = 0 ; i<15; ++i)
+{
+openf[i]= NULL;
+}
+this->Create("stdin", 0);
+		this->Create("stdout", 0);
+		openf[index++] = this->Open("stdin", 2);
+		openf[index++] = this->Open("stdout", 3); 
+
+}
+
+	~FileSystem()
+	{
+		for (int i = 0; i < 15; ++i)
+		{
+			if (openf[i] != NULL) delete openf[i];
+		}
+		delete[] openf;
+	}
+
+//default func
     bool Create(char *name, int initialSize) { 
 	int fileDescriptor = OpenForWrite(name);
 
@@ -59,7 +88,26 @@ class FileSystem {
 	  if (fileDescriptor == -1) return NULL;
 	  return new OpenFile(fileDescriptor);
       }
+	//Overload 
+	OpenFile* Open(char *name, int type) {
+		int fileDescriptor = OpenForReadWrite(name, FALSE);
 
+		if (fileDescriptor == -1) return NULL;
+		//index++;
+		return new OpenFile(fileDescriptor, type);
+	}
+
+	int FindFreeSlot()
+	{
+		for(int i = 2; i < 15; i++)
+		{
+			if(openf[i] == NULL) return i;		
+		}
+		return -1;
+	}
+	
+
+//deafult func
     bool Remove(char *name) { return Unlink(name) == 0; }
 
 };
@@ -67,6 +115,11 @@ class FileSystem {
 #else // FILESYS
 class FileSystem {
   public:
+
+  	//Khai bao
+  	OpenFile** openf;
+	int index;
+
     FileSystem(bool format);		// Initialize the file system.
 					// Must be called *after* "synchDisk" 
 					// has been initialized.
@@ -78,6 +131,8 @@ class FileSystem {
 					// Create a file (UNIX creat)
 
     OpenFile* Open(char *name); 	// Open a file (UNIX open)
+    OpenFile* Open(char *name, int type); //overload
+    int FindFreeSlot();
 
     bool Remove(char *name);  		// Delete a file (UNIX unlink)
 
