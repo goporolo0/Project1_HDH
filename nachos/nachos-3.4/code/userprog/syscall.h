@@ -22,7 +22,7 @@
 #define SC_Exit		1
 #define SC_Exec		2
 #define SC_Join		3
-
+//
 #define SC_CreateFile	4
 #define SC_Open		5
 #define SC_Read		6
@@ -78,7 +78,7 @@ typedef int OpenFileId;
 
 int CreateFile(char* name);
 
-// Mo Nachos file co ten la "name" tra ve OpenFileId dung de doc va ghi file
+
 OpenFileId Open(char *name, int type);
 
 void Close(OpenFileId id);
@@ -96,7 +96,7 @@ int Write(char *buffer, int charcount, OpenFileId id);
 
 int Seek(int pos, OpenFileId id);
 
-//can kiem tra is opening truoc khi xoa file
+
 int Delete(char*name);
 
 

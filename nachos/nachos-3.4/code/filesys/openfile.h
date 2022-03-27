@@ -30,11 +30,21 @@ class OpenFile {
   public:
   	//Khai bao bien type
   	int type;
+	    int file;
   	
 	//Ham dung cua class OpenFile
 	OpenFile(int f) { file = f; currentOffset = 0; type = 0; }	// mo file mac dinh
 	OpenFile(int f, int t) { file = f; currentOffset = 0; type = t; }	// mo file voi tham so type
     	~OpenFile() { Close(file); }
+
+//them seek
+	int getID(){return 15;}
+  	int Seek(int pos) {
+		Lseek(file, pos, 0);
+		currentOffset = Tell(file);
+		return currentOffset;
+	}
+	//
 
     int ReadAt(char *into, int numBytes, int position) { 
     		Lseek(file, position, 0); 
@@ -56,10 +66,20 @@ class OpenFile {
 		return numWritten;
 		}
 
-    int Length() { Lseek(file, 0, 2); return Tell(file); }
+ //   int Length() { Lseek(file, 0, 2); return Tell(file); }
+	int Length() {
+		int len;
+		Lseek(file, 0, 2);
+		len = Tell(file);
+		Lseek(file, currentOffset, 0);
+		return len;
+	}
     
+    int GetCurrentPos() { currentOffset = Tell(file); return currentOffset; }   
+
+ 
   private:
-    int file;
+
     int currentOffset;
 };
 
@@ -70,6 +90,8 @@ class OpenFile {
   public:
 //khai bao
 int type;
+int f;
+
     OpenFile(int sector);		// Open a file whose header is located
 					// at "sector" on the disk
 //khai bao
@@ -95,7 +117,12 @@ int type;
 					// file (this interface is simpler 
 					// than the UNIX idiom -- lseek to 
 					// end of file, tell, lseek back 
-    
+    //them
+	int getID(){return 123;}
+    int GetCurrentPos()
+	{
+		return seekPosition;
+	}
   private:
     FileHeader *hdr;			// Header for this file 
     int seekPosition;			// Current position within the file

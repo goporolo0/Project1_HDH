@@ -6,18 +6,18 @@ int main()
 {
 	int stdin;
 	char fileName[MAX_LENGTH];	
-		
+	
 	PrintString("Nhap ten file\n");
 	ReadString(fileName, MAX_LENGTH);
 	
-	
 	if (CreateFile(fileName) == 0) 
 	{
-		PrintString("Tao file thanh cong");
+		PrintString("--- Tao file thanh cong---");
+
 	}
 	else
 	{
-		PrintString("Tao file that bai");
+		PrintString("--- Tao file that bai ---");
 	}
 	
 	return 0;

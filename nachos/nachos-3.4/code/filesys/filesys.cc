@@ -261,6 +261,9 @@ FileSystem::Open(char *name)
 OpenFile* FileSystem::Open(char *name, int type)
 {
 	int freeSlot = this->FindFreeSlot();
+
+	
+	
 	Directory *directory = new Directory(NumDirEntries);
 	OpenFile *openFile = NULL;
 	int sector;

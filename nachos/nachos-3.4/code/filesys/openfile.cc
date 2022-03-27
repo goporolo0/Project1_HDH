@@ -29,6 +29,7 @@
 
 OpenFile::OpenFile(int sector)
 { 
+	//f = sector;
     hdr = new FileHeader;
     hdr->FetchFrom(sector);
     seekPosition = 0;
@@ -36,6 +37,7 @@ OpenFile::OpenFile(int sector)
 //khai bao ham overload
 OpenFile::OpenFile(int sector, int _type)
 {
+	//f = sector;
 	hdr = new FileHeader;
 	hdr->FetchFrom(sector);
 	seekPosition = 0;
@@ -58,6 +60,9 @@ OpenFile::~OpenFile()
 //
 //	"position" -- the location within the file for the next Read/Write
 //----------------------------------------------------------------------
+
+
+
 
 void
 OpenFile::Seek(int position)
@@ -202,3 +207,4 @@ OpenFile::Length()
 { 
     return hdr->FileLength(); 
 }
+//int OpenFile::getID(){return file;}
